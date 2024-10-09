@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Історія обчислювальної техніки - Типи техніки</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        button {
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #cc5200;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Історія обчислювальної техніки</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Головна</a></li>
+                <li><a href="history.html">Історія</a></li>
+                <li><a href="inventions.html">Винаходи</a></li>
+                <li><a href="pioneers.html">Піонери</a></li>
+                <li><a href="types.html">Типи техніки</a></li>
+                <li><a href="future.html">Майбутнє</a></li>
+                <li><a href="js.html">JavaScript</a></li>
+                <li><a href="survey.html">Опитування</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section>
+        <h2>Опитування</h2>
+
+        <form id="surveyForm" onsubmit="return validateForm();">
+            <fieldset>
+                <legend>Наскільки ви задоволені нашим сайтом?</legend>
+                <label><input type="radio" name="siteSatisfaction" value="Дуже задоволений"> Дуже задоволений</label><br>
+                <label><input type="radio" name="siteSatisfaction" value="Задоволений"> Задоволений</label><br>
+                <label><input type="radio" name="siteSatisfaction" value="Нейтрально"> Нейтрально</label><br>
+                <label><input type="radio" name="siteSatisfaction" value="Незадоволений"> Незадоволений</label><br>
+            </fieldset>
+        
+            <fieldset>
+                <legend>Які функції сайту ви використовували?</legend>
+                <label><input type="checkbox" name="featuresUsed" value="Читання статей"> Читання статей</label><br>
+                <label><input type="checkbox" name="featuresUsed" value="Коментування"> Коментування</label><br>
+                <label><input type="checkbox" name="featuresUsed" value="Завантаження файлів"> Завантаження файлів</label><br>
+                <label><input type="checkbox" name="featuresUsed" value="Контактна форма"> Контактна форма</label><br>
+                <label><input type="checkbox" name="featuresUsed" value="Реєстрація"> Реєстрація</label><br>
+            </fieldset>
+        
+            <fieldset>
+                <legend>Коментарі:</legend>
+                <label>Коментар 1:</label><br>
+                <textarea id="textarea1" rows="2" cols="30"></textarea><br>
+                <label>Коментар 2:</label><br>
+                <textarea id="textarea2" rows="2" cols="30"></textarea><br>
+                <label>Коментар 3:</label><br>
+                <textarea id="textarea3" rows="2" cols="30"></textarea><br>
+                <label>Коментар 4:</label><br>
+                <textarea id="textarea4" rows="2" cols="30"></textarea><br>
+                <label>Коментар 5:</label><br>
+                <textarea id="textarea5" rows="2" cols="30"></textarea><br>
+            </fieldset>
+        
+            <button type="submit">Підтвердити</button>
+            <button type="button" onclick="clearForm()">Очистити</button>
+        </form>
+
+        <h2>Результати опитування</h2>
+        <form>
+            <textarea id="messageOutput" rows="10" cols="50" readonly></textarea><br>
+            <button type="button" onclick="sendEmail()">Надіслати результати на пошту</button>
+        </form>
+
+        <script>
+            function validateForm() {
+                // Перевірка Radio
+                let radios = document.getElementsByName('siteSatisfaction');
+                let radioSelected = false;
+                for (let i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        radioSelected = true;
+                        break;
+                    }
+                }
+
+                if (!radioSelected) {
+                    alert("Будь ласка, виберіть, наскільки ви задоволені сайтом.");
+                    return false;
+                }
+
+                // Перевірка Checkbox
+                let checkboxes = document.getElementsByName('featuresUsed');
+                let checkboxSelected = false;
+                for (let i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checkboxSelected = true;
+                        break;
+                    }
+                }
+
+                if (!checkboxSelected) {
+                    alert("Будь ласка, виберіть хоча б одну функцію, яку ви використовували.");
+                    return false;
+                }
+
+                // Перевірка Text Area
+                for (let i = 1; i <= 5; i++) {
+                    let textarea = document.getElementById('textarea' + i);
+                    if (textarea.value.trim() === "") {
+                        alert("Будь ласка, заповніть всі текстові поля.");
+                        return false;
+                    }
+                }
+
+                // Перенесення результатів
+                let output = "Результати опитування:\n\n";
+                output += "Задоволення сайтом: " + document.querySelector('input[name="siteSatisfaction"]:checked').value + "\n";
+                output += "Використані функції: " + Array.from(document.querySelectorAll('input[name="featuresUsed"]:checked')).map(checkbox => checkbox.value).join(", ") + "\n";
+                for (let i = 1; i <= 5; i++) {
+                    output += "Коментар " + i + ": " + document.getElementById('textarea' + i).value + "\n";
+                }
+
+                document.getElementById('messageOutput').value = output;
+                return false; // Запобігання відправлення форми
+            }
+
+            function clearForm() {
+                document.getElementById('surveyForm').reset();
+            }
+
+            function sendEmail() {
+                let emailBody = document.getElementById('messageOutput').value;
+                window.location.href = "mailto:example@gmail.com?subject=Результати%20опитування&body=" + encodeURIComponent(emailBody);
+            }
+        </script>
+    </section>
+    
+    <footer>
+        <p>&copy; 2024 Історія обчислювальної техніки. Усі права захищені.</p>
+    </footer>
+</body>
+</html>
